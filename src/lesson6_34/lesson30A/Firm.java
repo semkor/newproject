@@ -1,0 +1,30 @@
+package lesson6_34.lesson30A;
+
+import java.util.*;
+
+public class Firm {
+    private Date dateFounded;
+    private Collection<Department> departaments;
+    private Collection<Customer> customers;
+
+    public Firm(Collection<Department> departaments, Collection<Customer> customers) {
+        this.departaments = departaments;
+        this.customers = customers;
+    }
+
+    public Collection<Department> getDepartaments() {
+        return departaments;
+    }
+
+    public Collection<Customer> getCustomers() {
+        return customers;
+    }
+
+    @Override
+    public String toString() {
+        return "Firm{" +
+                ", departaments=" + departaments +
+                ", customers=" + customers +
+                '}';
+    }
+}
