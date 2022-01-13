@@ -1,11 +1,7 @@
 package lesson6_34.lesson9A;
 
-import lesson6_34.lesson9E.User;
-
 public class UserRepository {
     private User[] users;
-    private String[] strings;
-    private Long[] longs;
 
     UserRepository(User[] users) {
         this.users = users;
@@ -15,33 +11,33 @@ public class UserRepository {
         return users;
     }
 
-
+//-----------------------------------------------------------------------------------------------------
     public String[] getUserNames() {
-        strings = new String[users.length];
+        String[] strings = new String[users.length];
         for (int i = 0; i < users.length; i++) {
-            strings[i] = users[i].getName();
+            if (users[i] != null)
+                strings[i] = users[i].getName();
         }
         return strings;
     }
 
-
     public Long[] getUserIds() {
-        longs = new Long[users.length];
+        Long[] longs = new Long[users.length];
         for (int i = 0; i < users.length; i++) {
-            longs[i] = users[i].getId();
+            if (users[i] != null)
+                longs[i] = users[i].getId();
         }
         return longs;
     }
 
-
     public String getUserNameById(long id) {
-        int count = 0;
+        String result = null;
         for (int i = 0; i < users.length; i++) {
-            if (id == longs[i]) {
+            if (users[i] != null && id == users[i].getId()) {
+                result = users[i].getName();
                 break;
             }
-            count++;
         }
-        return strings[count];
+        return result;
     }
 }

@@ -4,9 +4,6 @@ import lesson6_34.lesson9E.User;
 
 public class UserRepository {
     private User[] users;
-    private String[] strings;
-    private Long[] longs;
-    private String[] arraySessionId;
 
     UserRepository(User[] users) {
         this.users = users;
@@ -18,72 +15,64 @@ public class UserRepository {
 
 
     public String[] getUserNames() {
-        strings = new String[users.length];
+        String[] strings = new String[users.length];
         for (int i = 0; i < users.length; i++) {
-            strings[i] = users[i].getName();
+            if (users[i] != null)
+                strings[i] = users[i].getName();
         }
         return strings;
     }
 
     public Long[] getUserIds() {
-        longs = new Long[users.length];
+        Long[] longs = new Long[users.length];
         for (int i = 0; i < users.length; i++) {
-            longs[i] = users[i].getId();
+            if (users[i] != null)
+                longs[i] = users[i].getId();
         }
         return longs;
     }
 
     public String getUserNameById(long id) {
-        int count = 0;
+        String result = null;
         for (int i = 0; i < users.length; i++) {
-            if (id == longs[i]) {
+            if (users[i] != null && id == users[i].getId()) {
+                result = users[i].getName();
                 break;
             }
-            count++;
         }
-        return strings[count];
+        return result;
     }
 
 
     public User getUserByName(String name) {
-        int count = 0;
         User user = null;
         for (int i = 0; i < users.length; i++) {
-            if (name.equals(users[i].getName())) {
+            if (users[i] != null && name.equals(users[i].getName())) {
                 user = users[i];
                 break;
             }
-            count++;
         }
         return user;
     }
 
     public User getUserById(long id) {
-        int count = 0;
         User user = null;
         for (int i = 0; i < users.length; i++) {
-            if (id == users[i].getId()) {
+            if (users[i] != null && id == users[i].getId()) {
                 user = users[i];
                 break;
             }
-            count++;
         }
         return user;
     }
 
     public User getUserBySessionId(String sessionId) {
-        arraySessionId = new String[users.length];
-        for (int i = 0; i < users.length; i++) {
-            arraySessionId[i] = users[i].getSessionId();
-        }
-        int count = 0;
         User user = null;
         for (int i = 0; i < users.length; i++) {
-            if (sessionId.equals(users[i].getSessionId())) {
+            if (users[i] != null && sessionId.equals(users[i].getSessionId())) {
                 user = users[i];
                 break;
             }
-            count++;
         }
         return user;
     }
