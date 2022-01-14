@@ -11,26 +11,52 @@ public class UserRepository {
         return users;
     }
 
+
     //-----------------------------------------------------------------------------------------------------
-    public String[] getUserNames() {
-        String[] strings = new String[users.length];
+    private int numberEmpty() {
+        int count = 0;
         for (int i = 0; i < users.length; i++) {
             if (users[i] != null) {
-                strings[i] = users[i].getName();
+                count++;
+            }
+        }
+        return count;
+
+    }
+
+    public String[] getUserNames() {
+        int count = numberEmpty();
+        if (count == 0)
+            return null;
+
+        String[] strings = new String[count];
+        int countPlace = 0;
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] != null) {
+                strings[countPlace] = users[i].getName();
+                countPlace++;
             }
         }
         return strings;
     }
 
+
     public Long[] getUserIds() {
-        Long[] longs = new Long[users.length];
+        int count = numberEmpty();
+        if (count == 0)
+            return null;
+
+        Long[] longs = new Long[count];
+        int countPlace = 0;
         for (int i = 0; i < users.length; i++) {
             if (users[i] != null) {
-                longs[i] = users[i].getId();
+                longs[countPlace] = users[i].getId();
+                countPlace++;
             }
         }
         return longs;
     }
+
 
     public String getUserNameById(long id) {
         String result = null;
