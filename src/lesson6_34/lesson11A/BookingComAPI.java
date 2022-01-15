@@ -1,5 +1,7 @@
 package lesson6_34.lesson11A;
 
+import java.util.*;
+
 public class BookingComAPI implements API {
     private Room[] rooms;
 
@@ -9,47 +11,20 @@ public class BookingComAPI implements API {
 
     @Override
     public Room[] findRooms(int price, int persons, String city, String hotel) {
-        GoogleAPI googleAPI = new GoogleAPI(rooms);
-        Room[] googleArrays = googleAPI.findRooms(price, persons, city, hotel);
+        int count = totalRooms(price, persons, city, hotel);
 
-        if (googleArrays == null)
+        if(count==0){
+            System.err.println("Cовпадений по заданным параметрам  не найдены");
             return null;
-
-        int count2 = 0;
-        int number = 0;
-        Room tmp = googleArrays[0];
-
-        for (int i = 0; i < rooms.length; i++) {
-            if (tmp.getPrice() != rooms[i].getPrice()) {
-                if ((((tmp.getPrice() - 50) <= rooms[i].getPrice()) && (rooms[i].getPrice() < tmp.getPrice())) || ((rooms[i].getPrice() > tmp.getPrice()) && (rooms[i].getPrice() <= (tmp.getPrice() + 50)))) {
-                    count2++;
-                }
-
-            }
         }
 
-        Room[] methodRoom1 = new Room[googleArrays.length + count2];
+        Room[] methodRoom1 = new Room[count];
+        int number=0;
         for (int i = 0; i < rooms.length; i++) {
-            if (rooms[i].getPrice() == price && rooms[i].getPersons() == persons && rooms[i].getCityName().equalsIgnoreCase(city) && rooms[i].getHotelName().equalsIgnoreCase(hotel)) {
-                methodRoom1[number] = rooms[i];
-                number++;
-            }
-        }
-        if (count2 != 0) {
-            for (int i = 0; i < rooms.length; i++) {
-                if (tmp.getPrice() != rooms[i].getPrice()) {
-                    if (((tmp.getPrice() - 50) <= rooms[i].getPrice()) && (rooms[i].getPrice() < tmp.getPrice())) {
-                        methodRoom1[number] = rooms[i];
-                        number++;
-                    }
-                }
-            }
-            for (int i = 0; i < rooms.length; i++) {
-                if (tmp.getPrice() != rooms[i].getPrice()) {
-                    if ((rooms[i].getPrice() > tmp.getPrice()) && (rooms[i].getPrice() <= (tmp.getPrice() + 50))) {
-                        methodRoom1[number] = rooms[i];
-                        number++;
-                    }
+            if (rooms[i].getPersons() == persons && rooms[i].getCityName().equalsIgnoreCase(city) && rooms[i].getHotelName().equalsIgnoreCase(hotel)) {
+                if ((((price - 100) <= rooms[i].getPrice()) && (rooms[i].getPrice() <= price)) || ((rooms[i].getPrice() >= price) && (rooms[i].getPrice() <= (price + 100)))) {
+                    methodRoom1[number] = rooms[i];
+                    number++;
                 }
             }
         }
@@ -57,9 +32,21 @@ public class BookingComAPI implements API {
     }
 
 
-    //общие параметры
     @Override
     public Room[] getAll() {
         return rooms;
+    }
+
+
+    private int totalRooms(int price, int persons, String city, String hotel) {
+        int count = 0;
+        for (int i = 0; i < rooms.length; i++) {
+            if (rooms[i].getPersons() == persons && rooms[i].getCityName().equalsIgnoreCase(city) && rooms[i].getHotelName().equalsIgnoreCase(hotel)) {
+                if ((((price - 100) <= rooms[i].getPrice()) && (rooms[i].getPrice() <= price)) || ((rooms[i].getPrice() >= price) && (rooms[i].getPrice() <= (price + 100)))) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 }

@@ -59,7 +59,6 @@ public class Room {
                 "id=" + id +
                 ", price=" + price +
                 ", persons=" + persons +
-                ", dateAvailableFrom=" + dateAvailableFrom +
                 ", hotelName='" + hotelName + '\'' +
                 ", cityName='" + cityName + '\'' +
                 '}';
