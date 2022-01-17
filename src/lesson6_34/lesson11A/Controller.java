@@ -10,58 +10,62 @@ public class Controller {
     }
 
     public Room[] requestRooms(int price, int persons, String city, String hotel) {
-        Room[] rooms11 = apis[0].findRooms(price, persons, city, hotel);
-        Room[] rooms12 = apis[1].findRooms(price, persons, city, hotel);
-        Room[] rooms13 = apis[2].findRooms(price, persons, city, hotel);
 
-        if (rooms11 == null && rooms12 == null && rooms13 == null) {
+        //cоздаю двумерный массив, для возможности  собрать воедино неизвестное количество  AПИ
+        Room[][] rooms = new Room[apis.length][];
+        int countSize = 0;
+        for (int i = 0; i < apis.length; i++) {
+            rooms[i] = apis[i].findRooms(price, persons, city, hotel);
+            countSize += rooms[i].length;
+        }
+
+        //проверка, есть совпадения или нет
+        if (countSize == 0) {
             System.err.println("Cовпадений по заданным параметрам  не найдены");
             System.exit(0);
         }
 
-        int count=0;
-        for (int i = 0; i < rooms11.length; i++) {
-            for (int j = 0; j < rooms12.length; j++) {
-                if (rooms12[j]!=null && rooms11[i].getId() == rooms12[j].getId()) {
-                    rooms12[j] = null;
-                    count++;
-                }
+        //конвертирую в одномерный массив
+        Room[] roomTemp = new Room[countSize];
+        int number = 0;
+        for (int i = 0; i < rooms.length; i++) {
+            for (int j = 0; j < rooms[i].length; j++) {
+                roomTemp[number++] = rooms[i][j];
             }
-            for (int k = 0; k < rooms13.length; k++) {
-                if (rooms13[k]!=null && rooms11[i].getId() == rooms13[k].getId()) {
-                    rooms13[k] = null;
-                    count++;
+        }
+
+        //зачищаю похожие  комнаты, если есть одинаковые комнаты из разных АПИ
+        int countPlace = 0;
+        for (int i = 0; i < roomTemp.length - 1; i++) {
+            for (int m = i + 1; m < roomTemp.length; m++) {
+                if ((roomTemp[i] != null && roomTemp[m] != null) && (roomTemp[i].getId() == roomTemp[m].getId())) {
+                    roomTemp[m] = null;
+                    countPlace++;
                 }
             }
         }
 
-        Room[] roomsResult=new Room[rooms11.length+rooms12.length+rooms13.length-count];
-        System.arraycopy(rooms11,0,roomsResult,0,rooms11.length);
-        int countPlace=rooms11.length;
-        for(int i=0;i<rooms12.length;i++) {
-            if (rooms12[i] != null) {
-                roomsResult[countPlace] = rooms12[i];
-                countPlace++;
+        //удаляю null - результирующий массив
+        int num = 0;
+        Room[] roomResult = new Room[countSize-countPlace];
+        for (int i = 0; i < roomTemp.length; i++) {
+            if (roomTemp[i] != null) {
+                roomResult[num++] = roomTemp[i];
             }
         }
-        for(int j=0;j<rooms13.length;j++) {
-            if (rooms13[j] != null) {
-                roomsResult[countPlace] = rooms13[j];
-                countPlace++;
-            }
-        }
-        return roomsResult;
+
+        return roomResult;
     }
 
 
     public Room[] check(API api1, API api2) {
-        Room[] rooms21 = api1.getAll();
-        Room[] rooms22 = api2.getAll();
+        Room[] roomsOne = api1.getAll();
+        Room[] roomsTwo = api2.getAll();
 
         int count = 0;
-        for (int i = 0; i < rooms22.length; i++) {
-            for (int j = 0; j < rooms21.length; j++) {
-                if (rooms22[i].getPrice() == rooms21[j].getPrice() && rooms22[i].getPersons() == rooms21[j].getPersons() && rooms22[i].getCityName().equalsIgnoreCase(rooms21[j].getCityName()) && rooms22[i].getHotelName().equalsIgnoreCase(rooms21[j].getHotelName()))
+        for (int i = 0; i < roomsOne.length; i++) {
+            for (int j = 0; j < roomsOne.length; j++) {
+                if (roomsTwo[i].getPrice() == roomsOne[j].getPrice() && roomsTwo[i].getPersons() == roomsOne[j].getPersons() && roomsTwo[i].getCityName().equalsIgnoreCase(roomsOne[j].getCityName()) && roomsTwo[i].getHotelName().equalsIgnoreCase(roomsOne[j].getHotelName()))
                     count++;
             }
         }
@@ -73,10 +77,10 @@ public class Controller {
 
         Room[] rooms = new Room[count];
         int number = 0;
-        for (int i = 0; i < rooms22.length; i++) {
-            for (int j = 0; j < rooms21.length; j++) {
-                if (rooms22[i].getPrice() == rooms21[j].getPrice() && rooms22[i].getPersons() == rooms21[j].getPersons() && rooms22[i].getCityName().equalsIgnoreCase(rooms21[j].getCityName()) && rooms22[i].getHotelName().equalsIgnoreCase(rooms21[j].getHotelName())) {
-                    rooms[number] = rooms21[j];
+        for (int i = 0; i < roomsTwo.length; i++) {
+            for (int j = 0; j < roomsOne.length; j++) {
+                if (roomsTwo[i].getPrice() == roomsOne[j].getPrice() && roomsTwo[i].getPersons() == roomsOne[j].getPersons() && roomsTwo[i].getCityName().equalsIgnoreCase(roomsOne[j].getCityName()) && roomsTwo[i].getHotelName().equalsIgnoreCase(roomsOne[j].getHotelName())) {
+                    rooms[number] = roomsOne[j];
                     number++;
                 }
             }
@@ -87,12 +91,12 @@ public class Controller {
 
     public Room cheapestRoom() {
         Room result = null;
-        Room[] rooms3 = apis[2].getAll();
-        int min = rooms3[0].getPrice();
-        for (int i = 1; i < rooms3.length; i++) {
-            if (min >= rooms3[i].getPrice()) {
-                min = rooms3[i].getPrice();
-                result = rooms3[i];
+        Room[] roomsMin = apis[2].getAll();
+        int min = roomsMin[0].getPrice();
+        for (int i = 1; i < roomsMin.length; i++) {
+            if (min >= roomsMin[i].getPrice()) {
+                min = roomsMin[i].getPrice();
+                result = roomsMin[i];
             }
         }
         return result;

@@ -10,24 +10,23 @@ public class TripAdvisorAPI implements API {
 
     @Override
     public Room[] findRooms(int price, int persons, String city, String hotel) {
-        int count2 = totalRooms(price, persons, city, hotel);
+        int count = totalRooms(price, persons, city, hotel);
+        Room[] methodRoom = new Room[count];
 
-        if (count2 == 0) {
-            System.err.println("Cовпадений по заданным параметрам  не найдены");
-            return null;
+        if (count == 0) {
+            return methodRoom;
         }
 
-        Room[] methodRoom2 = new Room[count2];
         int number = 0;
         for (int i = 0; i < rooms.length; i++) {
             if (rooms[i].getPrice() == price && rooms[i].getCityName().equalsIgnoreCase(city) && rooms[i].getHotelName().equalsIgnoreCase(hotel)) {
-                if (((((persons - 1) <= rooms[i].getPersons()) && (rooms[i].getPersons() <= persons)) || ((rooms[i].getPersons() >= persons) && (rooms[i].getPersons() <= (persons + 1))))) {
-                    methodRoom2[number] = rooms[i];
+                if (((persons - 1) <= rooms[i].getPersons()) &&  (rooms[i].getPersons() <= (persons + 1))) {
+                    methodRoom[number] = rooms[i];
                     number++;
                 }
             }
         }
-        return methodRoom2;
+        return methodRoom;
     }
 
 
@@ -41,7 +40,7 @@ public class TripAdvisorAPI implements API {
         int count = 0;
         for (int i = 0; i < rooms.length; i++) {
             if (rooms[i].getPrice() == price && rooms[i].getCityName().equalsIgnoreCase(city) && rooms[i].getHotelName().equalsIgnoreCase(hotel)) {
-                if (((((persons - 1) <= rooms[i].getPersons()) && (rooms[i].getPersons() <= persons)) || ((rooms[i].getPersons() >= persons) && (rooms[i].getPersons() <= (persons + 1))))) {
+                if (((persons - 1) <= rooms[i].getPersons()) &&  (rooms[i].getPersons() <= (persons + 1))) {
                     count++;
                 }
             }

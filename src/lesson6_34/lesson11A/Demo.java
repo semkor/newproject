@@ -61,7 +61,7 @@ public class Demo {
 //                System.out.println(el);
 //            }
 //
-//            Room[] roomsResult2=bookingComAPI.findRooms(150, 2, "English", "Tanrus");
+//            Room[] roomsResult2=bookingComAPI.findRooms(152, 7, "English", "Tanrus");
 //            for(Room el: roomsResult2){
 //                System.out.println(el);
 //            }

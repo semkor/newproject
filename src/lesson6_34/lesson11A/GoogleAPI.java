@@ -11,22 +11,21 @@ public class GoogleAPI implements API {
 
     @Override
     public Room[] findRooms(int price, int persons, String city, String hotel) {
-        int count3 = totalRooms(price, persons, city, hotel);
+        int count = totalRooms(price, persons, city, hotel);
+        Room[] methodRoom = new Room[count];
 
-        if(count3==0){
-            System.err.println("Cовпадений по заданному параметру  не найдено");
-            return null;
+        if(count==0){
+            return methodRoom;
         }
 
-        Room[] methodRoom3 = new Room[count3];
         int number=0;
         for (int i = 0; i < rooms.length; i++) {
             if (rooms[i].getPrice() == price && rooms[i].getPersons() == persons && rooms[i].getCityName().equalsIgnoreCase(city) && rooms[i].getHotelName().equalsIgnoreCase(hotel)) {
-                methodRoom3[number] = rooms[i];
+                methodRoom[number] = rooms[i];
                 number++;
             }
         }
-        return methodRoom3;
+        return methodRoom;
     }
 
 
