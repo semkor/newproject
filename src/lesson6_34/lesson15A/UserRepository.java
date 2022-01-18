@@ -1,4 +1,9 @@
 package lesson6_34.lesson15A;
+/*
+- в методе save вообще не вижу логики сохранения + проверки дубликатов
+- в методе delete, никода иквлс не будет срабатывать, понимаешь почему? и зачем создается пустой юзер?
+- findUser - тут аналогично
+ */
 
 public class UserRepository {
     private User[] users;
@@ -12,57 +17,60 @@ public class UserRepository {
     }
 
     public User save(User user) {
-        if (user == null)
-            return null;
+        checkUser(user);
+        if (findUser(user) != null) {
+            System.err.println("User is already in the database");
+            System.exit(0);
+        }
 
         int count = 0;
-        for (User us : users) {
-            if (us == null) {
-                break;
+        for (int i=0;i<users.length;i++) {
+            if (users[i] == null) {
+                count++;
+                return users[i] = user;
             }
-            count++;
         }
-        return ifElse(user,count);
+
+        if (count == 0) {
+            System.err.println("There is no free space in the database");
+            System.exit(0);
+        }
+
+        return user;
     }
 
     public User update(User user) {
-        if (user == null)
-            return null;
-
-        int count=0;
-        for (int i=0;i<users.length;i++){
-            if (users[i] != null && users[i].equals(user)){
-                users[i] = user;
-                break;
-            }
-            count++;
+        checkUser(user);
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] != null && users[i].getId()==user.getId())
+                return users[i] = user;
         }
-        return ifElse(user,count);
+        return null;
     }
 
-    public void delete(long id){
-        User tmp=new User(id,"","");
-        for (int i=0;i<users.length;i++){
-            if(users[i]!=null && users[i].equals(tmp)) {
+    public void delete(long id) {
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] != null && users[i].getId() == id) {
+                System.err.println("User id - " + users[i].getId() + " delete");
                 users[i] = null;
             }
         }
     }
 
     public User findUser(User user) {
-        for (User us : users) {
-            if (us != null && us.equals(user))
+        checkUser(user);
+        for (User el : users) {
+            if (el != null && el.equals(user))
                 return user;
         }
         return null;
     }
 
-    private User ifElse(User user, int count){
-        if (count == users.length)
-            return null;
-        else{
-            users[count] = user;
-            return user;
+
+    private void checkUser(User user) {
+        if (user == null) {
+            System.err.println("User cannot be - null");
+            System.exit(0);
         }
     }
 }

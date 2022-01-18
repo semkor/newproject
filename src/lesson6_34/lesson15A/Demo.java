@@ -10,24 +10,24 @@ public class Demo {
         User user5 = new User(7l, "Пак", "1234077");
         User user6 = new User(9l, "Ким", "1234045");
         User user7 = new User(10l, "Минсу", "1234055");
-        User[] users = {user, user1, user2, user3, user4, null, null, user5, user6, user7};
+        User[] users = {user, user1, user2, user3, null, user4, null, user5, user6, user7};
 
         UserRepository userRepository = new UserRepository(users);
 
         //проверка findUser
-        System.out.println(userRepository.findUser(new User(10l,"Минсу","1234055")));
+        System.out.println(userRepository.findUser(new User(7l, "Пак", "1234077")));
         System.out.println(userRepository.findUser(null));
 
         //проверка save
         System.out.println(userRepository.save(null));
-        userRepository.save(new User(11l, "Минсу", "1234055"));
-        System.out.println("");
-        for (User us : users) {
-            System.out.println(us);
+        System.out.println(userRepository.save(new User(11l, "Минсу", "1234055")));
+        System.out.println();
+        for (User el : users) {
+            System.out.println(el);
         }
 
         //проверка delete - удаляет всех юзеров, у кого есть такое id
-        userRepository.delete(3l);
+        userRepository.delete(2l);
         for (User us : users) {
             System.out.println(us);
         }
