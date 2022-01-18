@@ -1,7 +1,5 @@
 package lesson6_34.lesson15B;
 
-import java.util.Arrays;
-
 public class Controller {
     private API[] apis;
 
@@ -10,63 +8,77 @@ public class Controller {
     }
 
     public Room[] requestRooms(int price, int persons, String city, String hotel) {
-        Room[] rooms11 = apis[0].findRooms(price, persons, city, hotel);
-        Room[] rooms12 = apis[1].findRooms(price, persons, city, hotel);
-        Room[] rooms13 = apis[2].findRooms(price, persons, city, hotel);
 
-        if (rooms11 == null && rooms12 == null && rooms13 == null)
-            return null;
-
-        if (Arrays.deepEquals(rooms11, rooms12) && Arrays.deepEquals(rooms11, rooms13))
-            return rooms11;
-
-        int count = rooms11.length + 1 + rooms12.length + 1 + rooms13.length;
-        int count1 = rooms11.length;
-        int count2 = rooms11.length + 1 + rooms12.length;
-
-        Room[] rooms1 = new Room[count];
-        rooms1[count1] = null;
-        rooms1[count2] = null;
-        for (int i = 0; i < count1; i++) {
-            rooms1[i] = rooms11[i];
+        //cоздаю двумерный массив, для возможности  собрать воедино неизвестное количество  AПИ
+        Room[][] rooms = new Room[apis.length][];
+        int countSize = 0;
+        for (int i = 0; i < apis.length; i++) {
+            rooms[i] = apis[i].findRooms(price, persons, city, hotel);
+            countSize += rooms[i].length;
         }
-        int j = 0;
-        for (int i = (count1 + 1); i < count2; i++) {
-            rooms1[i] = rooms12[j];
-            j++;
+
+        //проверка, есть совпадения или нет
+        if (countSize == 0) {
+            System.err.println("Cовпадений по заданным параметрам  не найдены");
+            System.exit(0);
         }
-        int k = 0;
-        for (int i = (count2 + 1); i < count; i++) {
-            rooms1[i] = rooms13[k];
-            k++;
+
+        //конвертирую в одномерный массив
+        Room[] roomTemp = new Room[countSize];
+        int number = 0;
+        for (int i = 0; i < rooms.length; i++) {
+            for (int j = 0; j < rooms[i].length; j++) {
+                roomTemp[number++] = rooms[i][j];
+            }
         }
-        return rooms1;
+
+        //зачищаю похожие  комнаты, если есть одинаковые комнаты из разных АПИ
+        int countPlace = 0;
+        for (int i = 0; i < roomTemp.length - 1; i++) {
+            for (int m = i + 1; m < roomTemp.length; m++) {
+                if ((roomTemp[i] != null && roomTemp[m] != null) && (roomTemp[i].getId() == roomTemp[m].getId())) {
+                    roomTemp[m] = null;
+                    countPlace++;
+                }
+            }
+        }
+
+        //удаляю null - результирующий массив
+        int num = 0;
+        Room[] roomResult = new Room[countSize-countPlace];
+        for (int i = 0; i < roomTemp.length; i++) {
+            if (roomTemp[i] != null) {
+                roomResult[num++] = roomTemp[i];
+            }
+        }
+
+        return roomResult;
     }
 
 
     public Room[] check(API api1, API api2) {
-        int count = 0;
-        int number = 0;
-        Room[] rooms21 = api1.getAll();
-        Room[] rooms22 = api2.getAll();
+        Room[] roomsOne = api1.getAll();
+        Room[] roomsTwo = api2.getAll();
 
-        for (int i = 0; i < rooms22.length; i++) {
-            for (int j = 0; j < rooms21.length; j++) {
-                   if(rooms22[i].equals(rooms21[j]))
+        int count = 0;
+        for (int i = 0; i < roomsTwo.length; i++) {
+            for (int j = 0; j < roomsOne.length; j++) {
+                if (roomsTwo[i].equals(roomsOne[j]))
                     count++;
             }
         }
 
         if (count == 0) {
             System.err.println("Cовпадений нет");
-            return null;
+            System.exit(0);
         }
 
         Room[] rooms = new Room[count];
-        for (int i = 0; i < rooms22.length; i++) {
-            for (int j = 0; j < rooms21.length; j++) {
-                if((rooms22[i].equals(rooms21[j]))){
-                    rooms[number] = rooms21[j];
+        int number = 0;
+        for (int i = 0; i < roomsTwo.length; i++) {
+            for (int j = 0; j < roomsOne.length; j++) {
+                if (roomsTwo[i].equals(roomsOne[j])) {
+                    rooms[number] = roomsOne[j];
                     number++;
                 }
             }
@@ -76,8 +88,15 @@ public class Controller {
 
 
     public Room cheapestRoom() {
-        Room[] rooms3 = apis[2].getAll();
-        Room resultRoom = rooms3[0];
-        return resultRoom;
+        Room result = null;
+        Room[] roomsMin = apis[2].getAll();
+        int min = roomsMin[0].getPrice();
+        for (int i = 1; i < roomsMin.length; i++) {
+            if (min >= roomsMin[i].getPrice()) {
+                min = roomsMin[i].getPrice();
+                result = roomsMin[i];
+            }
+        }
+        return result;
     }
 }

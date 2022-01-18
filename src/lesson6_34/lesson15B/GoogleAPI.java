@@ -1,5 +1,6 @@
 package lesson6_34.lesson15B;
 
+
 public class GoogleAPI implements API {
     private Room[] rooms;
 
@@ -7,54 +8,42 @@ public class GoogleAPI implements API {
         this.rooms = rooms;
     }
 
+
     @Override
     public Room[] findRooms(int price, int persons, String city, String hotel) {
-        int count = 0;
-        int number=0;
-        Room roomTemp = new Room(0, price, persons, null, hotel,city);
-
-        for (int i = 0; i < rooms.length; i++) {
-            if (rooms[i].equals(roomTemp)) {
-                count++;
-            }
-        }
+        Room temp=new Room(0, price, persons, null, hotel,city);
+        int count = totalRooms(temp);
+        Room[] methodRoom = new Room[count];
 
         if(count==0){
-            System.err.println("Cовпадений по заданному параметру  не найдено");
-            return null;
+            return methodRoom;
         }
 
-        Room[] methodRoom3 = new Room[count];
+        int number=0;
         for (int i = 0; i < rooms.length; i++) {
-            if (rooms[i].equals(roomTemp))  {
-                methodRoom3[number] = rooms[i];
+            if (rooms[i].equals(temp)) {
+                methodRoom[number] = rooms[i];
                 number++;
             }
         }
-        return methodRoom3;
+        return methodRoom;
     }
 
 
-//метод находит все самые  дешевые комнаты из массива
+
     @Override
     public Room[] getAll() {
+        return rooms;
+    }
+
+
+    private int totalRooms(Room temp){
         int count = 0;
-        int resultRooms = rooms[0].getPrice();
-        for (int i = 1; i < rooms.length; i++) {
-            if (resultRooms >= rooms[i].getPrice()) {
-                resultRooms = rooms[i].getPrice();
+        for (int i = 0; i < rooms.length; i++) {
+            if (rooms[i].equals(temp)) {
                 count++;
             }
         }
-
-        Room[] resRoom = new Room[count];
-        int number = 0;
-        for (int i = 0; i < rooms.length; i++) {
-            if (resultRooms == rooms[i].getPrice()) {
-                resRoom[number] = rooms[i];
-                number++;
-            }
-        }
-        return resRoom;
+       return count;
     }
 }

@@ -63,7 +63,7 @@ public class Controller {
         Room[] roomsTwo = api2.getAll();
 
         int count = 0;
-        for (int i = 0; i < roomsOne.length; i++) {
+        for (int i = 0; i < roomsTwo.length; i++) {
             for (int j = 0; j < roomsOne.length; j++) {
                 if (roomsTwo[i].getPrice() == roomsOne[j].getPrice() && roomsTwo[i].getPersons() == roomsOne[j].getPersons() && roomsTwo[i].getCityName().equalsIgnoreCase(roomsOne[j].getCityName()) && roomsTwo[i].getHotelName().equalsIgnoreCase(roomsOne[j].getHotelName()))
                     count++;

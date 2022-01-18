@@ -1,4 +1,4 @@
-package lesson15BC;
+package lesson6_34.lesson15B;
 
 import java.util.Arrays;
 import java.util.Date;

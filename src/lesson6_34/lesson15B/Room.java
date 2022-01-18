@@ -3,7 +3,6 @@ package lesson6_34.lesson15B;
 import java.util.Date;
 import java.util.Objects;
 
-//описывает комнаты, которые ищет система
 public class Room {
     private long id;
     private int price;
@@ -72,7 +71,6 @@ public class Room {
                 "id=" + id +
                 ", price=" + price +
                 ", persons=" + persons +
-                ", dateAvailableFrom=" + dateAvailableFrom +
                 ", hotelName='" + hotelName + '\'' +
                 ", cityName='" + cityName + '\'' +
                 '}';
