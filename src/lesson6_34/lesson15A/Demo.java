@@ -19,25 +19,25 @@ public class Demo {
         System.out.println(userRepository.findUser(null));
 
         //проверка save
-        System.out.println(userRepository.save(null));
-        System.out.println(userRepository.save(new User(11l, "Минсу", "1234055")));
-        System.out.println();
-        for (User el : users) {
-            System.out.println(el);
-        }
+//        System.out.println(userRepository.save(null));
+//        System.out.println(userRepository.save(new User(11l, "Минсу", "1234055")));
+//        System.out.println();
+//        for (User el : users) {
+//            System.out.println(el);
+//        }
 
         //проверка delete - удаляет всех юзеров, у кого есть такое id
-        userRepository.delete(2l);
-        for (User us : users) {
-            System.out.println(us);
-        }
+//        userRepository.delete(2l);
+//        for (User us : users) {
+//            System.out.println(us);
+//        }
 
         //проверка update
-        System.out.println(userRepository.update(null));
-        System.out.println(userRepository.update(new User(11l, "Минсу", "1234055")));
-        System.out.println(userRepository.update(new User(9l, "Новый Минсу", "new-1234055")));
-        for (User us : users) {
-            System.out.println(us);
-        }
+//        System.out.println(userRepository.update(null));
+//        System.out.println(userRepository.update(new User(11l, "Минсу", "1234055")));
+//        System.out.println(userRepository.update(new User(9l, "Новый Минсу", "new-1234055")));
+//        for (User us : users) {
+//            System.out.println(us);
+//        }
     }
 }
